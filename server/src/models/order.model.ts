@@ -147,7 +147,6 @@ const orderSchema: Schema<IORDER> = new Schema(
 orderSchema.index({ customerId: 1 });
 orderSchema.index({ farmerId: 1 });
 orderSchema.index({ status: 1 });
-orderSchema.index({ orderId: 1 });
 orderSchema.index({ createdAt: -1 });
 const Order = mongoose.model<IORDER>("Order", orderSchema);
 orderSchema.pre("save", async function (next) {

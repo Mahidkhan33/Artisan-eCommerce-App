@@ -18,7 +18,20 @@ import { stripeWebhook } from "./controllers/stripeWebhook.controller.js";
 const app = express();
 
 const PORT = process.env.PORT || 5000;
-connectDB();
+
+// Start the server only after the DB connection is established.
+(async () => {
+  try {
+    await connectDB();
+  } catch (err) {
+    console.error("Failed to connect to DB, exiting.", err);
+    process.exit(1);
+  }
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+  });
+})();
 
 
 
@@ -56,6 +69,3 @@ app.get("/", (_req, res) => res.json({ status: "OK" }));
 app.use(errorHandler);
 
 
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});

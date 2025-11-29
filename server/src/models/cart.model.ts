@@ -64,6 +64,7 @@ const cartSchema: Schema<ICART> = new Schema(
   },
   { timestamps: true }
 );
-cartSchema.index({ userId: 1 });
+// `userId` has `unique: true` on the field which creates the index,
+// avoid duplicating the index with schema.index().
 export const Cart = mongoose.model<ICART>("Cart", cartSchema);
 export default Cart;
