@@ -4,8 +4,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import FormField from "@/components/auth/FormField";
 import { Button } from "@/components/ui/button";
-import SocialLoginButton from "@/components/auth/SocialLoginButton";
-import Divider from "@/components/auth/Divider";
 import BackLink from "@/components/auth/BackLink";
 import { useForgotPasswordFarmer } from "@/hooks/useAuth";
 const validationSchema = Yup.object({
@@ -77,25 +75,15 @@ const FarmerForgotPasswordPage: React.FC = () => {
               </button>
             </span>
           </div>
-          <Divider text="Or login with" className="my-8" />
-          <div className="grid grid-cols-3 gap-4">
-            <SocialLoginButton
-              provider="facebook"
-              onClick={() => handleSocialLogin("facebook")}
-            />
-            <SocialLoginButton
-              provider="google"
-              onClick={() => handleSocialLogin("google")}
-            />
-            <SocialLoginButton
-              provider="apple"
-              onClick={() => handleSocialLogin("apple")}
-            />
-          </div>
         </div>
       </div>
-      <div className="hidden lg:flex lg:w-1/2 bg-gray-100 rounded-l-3xl items-center justify-center p-6 xl:p-8">
-        <div className="w-full max-w-xl h-[600px] rounded-2xl bg-gray-200" />
+
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
+      <img
+  src="/src/assets/farmer-forgot-password.jpg"
+  alt="Auth Illustration"
+  className="w-full h-[600px] object-cover block"
+/>
       </div>
     </div>
   );

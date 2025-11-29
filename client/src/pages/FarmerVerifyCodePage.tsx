@@ -55,7 +55,11 @@ const FarmerVerifyCodePage: React.FC = () => {
         <div className="max-w-sm w-full mx-auto lg:mx-0">
           <div className="mb-4 lg:mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gray-200 shrink-0" />
+            <img
+            src="/src/assets/Logo.png" 
+            alt="LocalHarvest Logo"
+            className="w-10 h-10 object-contain shrink-0" 
+            />
               <span className="text-xl font-bold text-gray-900">LocalHarvest</span>
             </div>
           </div>
@@ -118,8 +122,12 @@ const FarmerVerifyCodePage: React.FC = () => {
           </form>
         </div>
       </div>
-      <div className="hidden lg:flex lg:w-1/2 bg-gray-100 rounded-l-3xl items-center justify-center p-6 xl:p-8">
-        <div className="w-full max-w-xl h-[600px] rounded-2xl bg-gray-200" />
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
+      <img
+  src="/src/assets/farmer-verify-code.jpg"
+  alt="Auth Illustration"
+  className="w-full h-[600px] object-cover block"
+/>
       </div>
     </div>
   );

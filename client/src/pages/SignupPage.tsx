@@ -6,8 +6,6 @@ import { Eye, EyeOff } from "lucide-react";
 import FormField from "@/components/auth/FormField";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import SocialLoginButton from "@/components/auth/SocialLoginButton";
-import Divider from "@/components/auth/Divider";
 import { useRegisterUser } from "@/hooks/useAuth";
 const validationSchema = Yup.object({
   name: Yup.string()
@@ -66,7 +64,11 @@ const SignupPage: React.FC = () => {
           {}
           <div className="mb-4 lg:mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-gray-200 shrink-0" />
+            <img
+            src="/src/assets/Logo.png" 
+            alt="LocalHarvest Logo"
+            className="w-10 h-10 object-contain shrink-0" 
+            />
               <span className="text-xl font-bold text-gray-900">LocalHarvest</span>
             </div>
           </div>
@@ -233,28 +235,16 @@ const SignupPage: React.FC = () => {
               </Link>
             </span>
           </div>
-          {}
-          <Divider text="Or sign up with" className="my-8" />
-          {}
-          <div className="grid grid-cols-3 gap-4">
-            <SocialLoginButton
-              provider="facebook"
-              onClick={() => handleSocialLogin("facebook")}
-            />
-            <SocialLoginButton
-              provider="google"
-              onClick={() => handleSocialLogin("google")}
-            />
-            <SocialLoginButton
-              provider="apple"
-              onClick={() => handleSocialLogin("apple")}
-            />
-          </div>
+         
         </div>
       </div>
       {}
-      <div className="hidden lg:flex lg:w-1/2 bg-gray-100 rounded-l-3xl items-center justify-center p-6 xl:p-8">
-        <div className="w-full max-w-xl h-[600px] rounded-2xl bg-gray-200" />
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
+      <img
+  src="/src/assets/signup.jpg"
+  alt="Auth Illustration"
+  className="w-full h-[900px] object-cover block"
+/>
       </div>
     </div>
   );

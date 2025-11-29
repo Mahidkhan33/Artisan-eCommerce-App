@@ -85,7 +85,6 @@ const PaymentPage: React.FC = () => {
     };
     
     createIntent();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [address, paymentMethod]);
   
   useEffect(() => {
@@ -93,7 +92,6 @@ const PaymentPage: React.FC = () => {
       setClientSecret("");
       setPaymentIntentId("");
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [paymentMethod]);
   const handlePaymentMethodChange = (method: "card" | "cash") => {
     setPaymentMethod(method);
@@ -109,7 +107,6 @@ const PaymentPage: React.FC = () => {
         shippingAddress: address,
       });
       toast.success("Order placed successfully! You will pay cash on delivery.");
-      // Navigate to order confirmation with order data
       navigate("/order-confirmation", {
         state: {
           order: response.order,
@@ -138,7 +135,6 @@ const PaymentPage: React.FC = () => {
         shippingAddress: address,
       });
       toast.success("Payment successful! Order placed.");
-      // Navigate to order confirmation with order data
       navigate("/order-confirmation", {
         state: {
           order: response.order,
