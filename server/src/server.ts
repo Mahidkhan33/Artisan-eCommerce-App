@@ -24,15 +24,11 @@ const CLIENT_URL = process.env.CLIENT_URL ?? "https://farm-se-ghar.vercel.app";
 connectDB();
 
 
-app.use(cors({ 
-  origin: [
-    "http://localhost:3000",
-    "http://localhost:5173",
-     CLIENT_URL,
-    "https://farm-se-ghar.vercel.app",
-    "https://farm-se-gharrr.vercel.app" // Add your frontend URL explicitly
-  ], 
-  credentials: true 
+
+app.use(cors({
+  origin: CLIENT_URL,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  credentials: true
 }));
 app.use(cookieParser());
 app.use(
