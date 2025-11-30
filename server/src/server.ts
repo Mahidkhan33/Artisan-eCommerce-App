@@ -15,25 +15,27 @@ import paymentRoutes from "./routes/payment.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
 import reviewRoutes from "./routes/review.routes.js";
 import { stripeWebhook } from "./controllers/stripeWebhook.controller.js";
-import serverless from "serverless-http";
+
 const app = express();
 
-
-let isDBConnected = false;
-async function initDB() {
-  if (!isDBConnected) {
-    await connectDB();
-    isDBConnected = true;
-  }
-}
 const PORT = process.env.PORT || 5000;
+const CLIENT_URL = process.env.CLIENT_URL ?? "https://farm-se-ghar.vercel.app";
+
+connectDB();
 
 
-
-
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ 
+  origin: [
+    "http://localhost:3000",
+    "http://localhost:5173",
+     CLIENT_URL,
+    "https://farm-se-ghar.vercel.app",
+    "https://farm-se-gharrr.vercel.app" // Add your frontend URL explicitly
+  ], 
+  credentials: true 
+}));
 app.use(cookieParser());
-app.post(
+app.use(
   "/api/webhooks/stripe",
   express.raw({ type: "application/json" }),
   stripeWebhook
@@ -65,12 +67,13 @@ app.get("/", (_req, res) => res.json({ status: "OK" }));
 app.use(errorHandler);
 
 
-// app.listen(PORT, () => {
-//   console.log(`Server is running on http://localhost:${PORT}`);
-// });
-
-
-export const handler = serverless(async (req:Request, res:Response) => {
-  await initDB(); // ensure DB connection BEFORE handling requests
-  return app(req, res);
+if(process.env.NODE_ENV !== "production"){
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
+}
+
+
+export default app;
+
+
