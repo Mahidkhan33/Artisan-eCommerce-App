@@ -11,15 +11,5 @@
       "src": "/(.*)",
       "dest": "api/index.ts"
     }
-  ],
-  "env": {
-    "MONGO_URI": "@MONGO_URI",
-    "CLIENT_URL": "@CLIENT_URL",
-    "JWT_SECRET": "@JWT_SECRET",
-    "JWT_REFRESH_SECRET": "@JWT_REFRESH_SECRET",
-    "STRIPE_SECRET_KEY": "@STRIPE_SECRET_KEY",
-    "CLOUDINARY_CLOUD_NAME": "@CLOUDINARY_CLOUD_NAME",
-    "CLOUDINARY_API_KEY": "@CLOUDINARY_API_KEY",
-    "CLOUDINARY_API_SECRET": "@CLOUDINARY_API_SECRET"
-  }
+  ]
 }
