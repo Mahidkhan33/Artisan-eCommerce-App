@@ -41,39 +41,31 @@ const optionalEnvVars: Record<string, string> = {
 };
 
 export const validateEnv = (): void => {
-  try {
-    const missingVars: string[] = [];
-    requiredEnvVars.forEach((varName) => {
-      if (!process.env[varName]) {
-        missingVars.push(varName);
-      }
-    });
-    Object.entries(optionalEnvVars).forEach(([key, defaultValue]) => {
-      if (!process.env[key]) {
-        process.env[key] = defaultValue;
-      }
-    });
-    if (missingVars.length > 0) {
-      const errorMessage = `Missing required environment variables: ${missingVars.join(", ")}`;
-      console.error(errorMessage);
-      // Never throw in production/serverless - just log
-      if (!process.env.VERCEL && process.env.NODE_ENV === "development") {
-        throw new Error(errorMessage);
-      }
+  const missingVars: string[] = [];
+  requiredEnvVars.forEach((varName) => {
+    if (!process.env[varName]) {
+      missingVars.push(varName);
     }
-  } catch (error) {
-    console.error("Environment validation error:", error);
-    // Don't crash the app
+  });
+  Object.entries(optionalEnvVars).forEach(([key, defaultValue]) => {
+    if (!process.env[key]) {
+      process.env[key] = defaultValue;
+    }
+  });
+  if (missingVars.length > 0) {
+    const errorMessage = `Missing required environment variables: ${missingVars.join(", ")}`;
+    console.error(errorMessage);
+    throw new Error(errorMessage);
   }
 };
 
 export const env: EnvConfig = {
   PORT: process.env.PORT || "5000",
   NODE_ENV: process.env.NODE_ENV || "development",
-  MONGO_URI: process.env.MONGO_URI || "",
-  CLIENT_URL: process.env.CLIENT_URL || "https://farm-se-ghar.vercel.app",
-  JWT_SECRET: process.env.JWT_SECRET || "",
-  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET || "",
+  MONGO_URI: process.env.MONGO_URI!,
+  CLIENT_URL: process.env.CLIENT_URL!,
+  JWT_SECRET: process.env.JWT_SECRET!,
+  JWT_REFRESH_SECRET: process.env.JWT_REFRESH_SECRET!,
   SMTP_HOST: process.env.SMTP_HOST,
   SMTP_SERVICE: process.env.SMTP_SERVICE,
   SMTP_PORT: process.env.SMTP_PORT,
@@ -88,9 +80,5 @@ export const env: EnvConfig = {
   CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 };
 
-// Run validation - but never crash
-try {
-  validateEnv();
-} catch (error) {
-  console.error("Failed to validate environment:", error);
-}
+
+validateEnv();

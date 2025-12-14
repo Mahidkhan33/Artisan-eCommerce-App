@@ -113,7 +113,7 @@ const shipmentSchema: Schema<ISHIPMENT> = new Schema(
 shipmentSchema.index({ farmerId: 1 });
 shipmentSchema.index({ orderId: 1 });
 shipmentSchema.index({ status: 1 });
-shipmentSchema.index({ shipmentId: 1 });
+// Note: shipmentId already has unique: true which creates an index, so no need for explicit index
 shipmentSchema.index({ createdAt: -1 });
 shipmentSchema.index({ expectedDeliveryDate: 1 });
 const Shipment = mongoose.model<ISHIPMENT>("Shipment", shipmentSchema);

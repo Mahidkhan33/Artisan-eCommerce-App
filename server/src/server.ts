@@ -21,47 +21,39 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL ?? "https://farm-se-ghar.vercel.app";
 
-// Connect to database asynchronously - don't block serverless function startup
-// Connection will be cached and reused across invocations
-// Use setImmediate to ensure app setup completes first
-setImmediate(() => {
-    connectDB().catch((error) => {
-        console.error("Database connection error (non-fatal):", error);
-        // Continue - database will connect on first request or fail gracefully
-    });
-});
+connectDB();
 
+// CORS configuration to allow production and Vercel preview deployments
+const corsOptions = {
+  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) {
+      return callback(null, true);
+    }
 
+    // Allow production URL
+    if (origin === CLIENT_URL) {
+      return callback(null, true);
+    }
 
-// CORS middleware - MUST be first and before Helmet
-// Explicit OPTIONS handler for all routes (critical for Vercel serverless functions)
-app.options('*', (req: Request, res: Response) => {
-  res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
-  return res.sendStatus(200);
-});
+    // Allow all Vercel preview deployments (*.vercel.app)
+    if (origin.match(/^https:\/\/.*\.vercel\.app$/)) {
+      return callback(null, true);
+    }
 
-// CORS configuration for Vercel serverless functions
-app.use(cors({
-  origin: CLIENT_URL,
+    // Allow localhost for development
+    if (process.env.NODE_ENV === "development" && origin.match(/^http:\/\/localhost(:\d+)?$/)) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
+  },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version'],
-  optionsSuccessStatus: 200,
-  preflightContinue: false
-}));
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
 
-// Ensure CORS headers are always set on every response (critical for Vercel)
-app.use((req: Request, res: Response, next: NextFunction) => {
-  res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
-  next();
-});
-
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(
   "/api/webhooks/stripe",
@@ -70,19 +62,10 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
-// Configure Helmet to not interfere with CORS
-app.use(helmet({
-  crossOriginResourcePolicy: { policy: "cross-origin" },
-  crossOriginEmbedderPolicy: false,
-  crossOriginOpenerPolicy: false
-}));
+app.use(helmet());
 app.use(morgan("dev"));
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof SyntaxError && "body" in err) {
-        // Ensure CORS headers are set before sending error response
-        res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
-        res.setHeader('Access-Control-Allow-Credentials', 'true');
         return res.status(400).json({ 
             success: false, 
             message: "Invalid JSON" 

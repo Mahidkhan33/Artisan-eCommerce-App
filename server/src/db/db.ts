@@ -2,45 +2,64 @@ import mongoose from "mongoose"
 // import { DB_NAME } from "../constants.js";
 
 
-// Cache the connection to reuse in serverless environments
-let cachedConnection: typeof mongoose | null = null;
-
 const connectDB = async () => {
-    // Return cached connection if it exists and is connected
-    if (cachedConnection && mongoose.connection.readyState === 1) {
-        return cachedConnection;
-    }
-
-    // If already connecting, wait for it
-    if (mongoose.connection.readyState === 2) {
-        return new Promise((resolve, reject) => {
-            mongoose.connection.once('connected', () => {
-                cachedConnection = mongoose;
-                resolve(mongoose);
-            });
-            mongoose.connection.once('error', reject);
-        });
-    }
-
     try {
-        const mongoUri = process.env.MONGO_URI;
-        if (!mongoUri) {
-            throw new Error("MONGO_URI environment variable is not set");
+        if (!process.env.MONGO_URI) {
+            throw new Error("MONGO_URI is not defined in environment variables");
         }
 
-        const db = await mongoose.connect(mongoUri, {
-            serverSelectionTimeoutMS: 5000,
-            socketTimeoutMS: 45000,
+        const db = await mongoose.connect(process.env.MONGO_URI, {
+            serverSelectionTimeoutMS: 30000, // 30 seconds timeout for server selection
+            socketTimeoutMS: 45000, // 45 seconds timeout for socket operations
+            maxPoolSize: 10, // Maintain up to 10 socket connections
+            minPoolSize: 5, // Maintain at least 5 socket connections
+            maxIdleTimeMS: 30000, // Close connections after 30 seconds of inactivity
+            retryWrites: true,
+            w: 'majority'
         });
         
-        cachedConnection = db;
-        console.log("Connected to database", db.connection.host);
-        return db;
-    } catch (error) {
-        console.error("Error connecting to database:", error);
-        cachedConnection = null;
-        // Never exit process - always throw so caller can handle
-        throw error;
+        console.log("✅ Connected to database:", db.connection.host);
+        console.log("📊 Database name:", db.connection.name);
+        
+        // Handle connection events
+        mongoose.connection.on('error', (err) => {
+            console.error("❌ MongoDB connection error:", err);
+        });
+
+        mongoose.connection.on('disconnected', () => {
+            console.warn("⚠️  MongoDB disconnected");
+        });
+
+        mongoose.connection.on('reconnected', () => {
+            console.log("🔄 MongoDB reconnected");
+        });
+
+        // Graceful shutdown
+        process.on('SIGINT', async () => {
+            await mongoose.connection.close();
+            console.log("MongoDB connection closed through app termination");
+            process.exit(0);
+        });
+
+    } catch (error: any) {
+        console.error("❌ Error connecting to database:");
+        console.error("   Message:", error.message);
+        
+        if (error.name === 'MongooseServerSelectionError') {
+            console.error("\n💡 Common solutions:");
+            console.error("   1. Check if your IP address is whitelisted in MongoDB Atlas");
+            console.error("   2. Verify your MONGO_URI connection string is correct");
+            console.error("   3. Check your network connection");
+            console.error("   4. Ensure MongoDB Atlas cluster is running");
+        }
+        
+        // Don't exit immediately in production - allow retries
+        if (process.env.NODE_ENV === 'production') {
+            console.error("⚠️  Retrying connection in 5 seconds...");
+            setTimeout(() => connectDB(), 5000);
+        } else {
+            process.exit(1);
+        }
     }
 }
 

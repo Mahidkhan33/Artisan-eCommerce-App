@@ -1,4 +1,5 @@
 import mongoose, { Schema, Document } from "mongoose";
+
 export interface ICartItem {
   productId: mongoose.Types.ObjectId;
   name: string;
@@ -64,6 +65,6 @@ const cartSchema: Schema<ICART> = new Schema(
   },
   { timestamps: true }
 );
-cartSchema.index({ userId: 1 });
+// Note: userId already has unique: true which creates an index, so no need for explicit index
 export const Cart = mongoose.model<ICART>("Cart", cartSchema);
 export default Cart;
