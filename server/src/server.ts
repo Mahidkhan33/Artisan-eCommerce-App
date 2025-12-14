@@ -21,7 +21,15 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const CLIENT_URL = process.env.CLIENT_URL ?? "https://farm-se-ghar.vercel.app";
 
-connectDB();
+// Connect to database asynchronously - don't block serverless function startup
+// Connection will be cached and reused across invocations
+// Use setImmediate to ensure app setup completes first
+setImmediate(() => {
+    connectDB().catch((error) => {
+        console.error("Database connection error (non-fatal):", error);
+        // Continue - database will connect on first request or fail gracefully
+    });
+});
 
 
 
