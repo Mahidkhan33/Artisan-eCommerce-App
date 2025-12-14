@@ -25,13 +25,34 @@ connectDB();
 
 
 
+// CORS configuration for Vercel serverless functions
 app.use(cors({
   origin: CLIENT_URL,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-CSRF-Token', 'X-Requested-With', 'Accept', 'Accept-Version', 'Content-Length', 'Content-MD5', 'Date', 'X-Api-Version'],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 }));
+
+// Explicit OPTIONS handler for all routes (critical for Vercel serverless functions)
+app.options('*', (req: Request, res: Response) => {
+  res.header('Access-Control-Allow-Origin', CLIENT_URL);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
+  res.sendStatus(200);
+});
+
+// Ensure CORS headers are always set (backup for Vercel serverless)
+app.use((req: Request, res: Response, next: NextFunction) => {
+  res.header('Access-Control-Allow-Origin', CLIENT_URL);
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
+  next();
+});
+
 app.use(cookieParser());
 app.use(
   "/api/webhooks/stripe",
