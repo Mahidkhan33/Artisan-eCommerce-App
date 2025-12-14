@@ -9,10 +9,10 @@ export const errorHandler = (err:Error | ApiError,_req:Request,res:Response,_nex
     console.error("Error:",err);
     
     // Ensure CORS headers are set on error responses (critical for Vercel)
-    res.header('Access-Control-Allow-Origin', CLIENT_URL);
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
+    res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
     
     res.status(statusCode).json({
         success:false,

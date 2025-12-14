@@ -25,6 +25,16 @@ connectDB();
 
 
 
+// CORS middleware - MUST be first and before Helmet
+// Explicit OPTIONS handler for all routes (critical for Vercel serverless functions)
+app.options('*', (req: Request, res: Response) => {
+  res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
+  return res.sendStatus(200);
+});
+
 // CORS configuration for Vercel serverless functions
 app.use(cors({
   origin: CLIENT_URL,
@@ -35,21 +45,12 @@ app.use(cors({
   preflightContinue: false
 }));
 
-// Explicit OPTIONS handler for all routes (critical for Vercel serverless functions)
-app.options('*', (req: Request, res: Response) => {
-  res.header('Access-Control-Allow-Origin', CLIENT_URL);
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
-  res.sendStatus(200);
-});
-
-// Ensure CORS headers are always set (backup for Vercel serverless)
+// Ensure CORS headers are always set on every response (critical for Vercel)
 app.use((req: Request, res: Response, next: NextFunction) => {
-  res.header('Access-Control-Allow-Origin', CLIENT_URL);
-  res.header('Access-Control-Allow-Credentials', 'true');
-  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
+  res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,PATCH,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-CSRF-Token,X-Requested-With,Accept,Accept-Version,Content-Length,Content-MD5,Date,X-Api-Version');
   next();
 });
 
@@ -61,13 +62,19 @@ app.use(
 );
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configure Helmet to not interfere with CORS
 app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" },
-  crossOriginEmbedderPolicy: false
+  crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false
 }));
 app.use(morgan("dev"));
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     if (err instanceof SyntaxError && "body" in err) {
+        // Ensure CORS headers are set before sending error response
+        res.setHeader('Access-Control-Allow-Origin', CLIENT_URL);
+        res.setHeader('Access-Control-Allow-Credentials', 'true');
         return res.status(400).json({ 
             success: false, 
             message: "Invalid JSON" 
