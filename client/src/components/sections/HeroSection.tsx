@@ -96,7 +96,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
           <div className="hidden lg:flex justify-center items-center">
             <div className="w-full max-w-md h-96 md:h-[500px] bg-white rounded-2xl shadow-lg overflow-hidden">
               <img
-                src="./src/assets/hero.jpg"
+                src="./assets/hero.jpg"
                 alt="Fresh organic produce"
                 className="w-full h-full object-cover"
               />

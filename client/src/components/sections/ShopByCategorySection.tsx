@@ -20,28 +20,28 @@ const defaultCategories: Category[] = [
     title: "Fresh Vegetables",
     description: "Farm-fresh vegetables delivered daily",
     to: "/vegetables",
-    image: "./src/assets/vegetables.jpg",
+    image: "./assets/vegetables.jpg",
   },
   {
     id: "2",
     title: "Nutritious Fruits",
     description: "Organic fruits picked at peak ripeness",
     to: "/fruits",
-    image: "./src/assets/fruits.jpg",
+    image: "./assets/fruits.jpg",
   },
   {
     id: "3",
     title: "Dairy Products",
     description: "Fresh dairy products from local farms",
     to: "/dairy",
-    image: "./src/assets/dairy-products.jpg",
+    image: "./assets/dairy-products.jpg",
   },
   {
     id: "4",
     title: "Healthy Spices",
     description: "Aromatic spices and herbs",
     to: "/herbs",
-    image: "./src/assets/spices.jpg",
+    image: "./assets/spices.jpg",
     },
 ];
 const ShopByCategorySection: React.FC<ShopByCategorySectionProps> = ({

@@ -67,7 +67,7 @@ const VerifyCodePage: React.FC = () => {
           <div className="mb-4 lg:mb-6">
             <div className="flex items-center gap-3">
             <img
-            src="/src/assets/Logo.png" 
+            src="/assets/Logo.png" 
             alt="LocalHarvest Logo"
             className="w-10 h-10 object-contain shrink-0" 
             />
@@ -135,7 +135,7 @@ const VerifyCodePage: React.FC = () => {
       </div>
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
       <img
-  src="/src/assets/verify-code.jpg"
+  src="/assets/verify-code.jpg"
   alt="Auth Illustration"
   className="w-full h-[600px] object-cover block"
 />

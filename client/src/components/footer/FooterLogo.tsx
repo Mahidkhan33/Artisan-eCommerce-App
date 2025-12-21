@@ -1,6 +1,5 @@
 import React from "react";
 import { cn } from "@/lib/utils";
-import logo from "@/assets/logo.png";
 
 interface FooterLogoProps {
   className?: string;
@@ -33,7 +32,7 @@ const FooterLogo: React.FC<FooterLogoProps> = ({
       >
         {showIcon && (
           <div className="w-10 h-10 rounded-full bg-white shrink-0" >
-            <img src={logo} alt="Logo" className="w-full h-full object-cover rounded-full" />
+            <img src="/assets/Logo.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
           </div>
         )}
         <span className="text-xl font-bold text-green-500">FarmSeGhar</span>

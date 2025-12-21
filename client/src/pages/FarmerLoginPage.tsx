@@ -42,7 +42,7 @@ const FarmerLoginPage: React.FC = () => {
           <div className="mb-4 lg:mb-6">
             <div className="flex items-center gap-3">
             <img
-            src="/src/assets/Logo.png" 
+            src="/assets/Logo.png" 
             alt="LocalHarvest Logo"
             className="w-10 h-10 object-contain shrink-0" 
             />
@@ -155,7 +155,7 @@ const FarmerLoginPage: React.FC = () => {
       {}
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
       <img
-  src="/src/assets/farmer-login.jpg"
+  src="/assets/farmer-login.jpg"
   alt="Auth Illustration"
   className="w-full h-[650px] object-cover block"
 />
