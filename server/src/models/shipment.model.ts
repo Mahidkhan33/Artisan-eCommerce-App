@@ -1,5 +1,13 @@
 import mongoose, { Schema, Document } from "mongoose";
-export type ShipmentStatus = "pending" | "preparing" | "in_transit" | "out_for_delivery" | "delivered" | "cancelled";
+
+export type ShipmentStatus =
+  | "pending"
+  | "preparing"
+  | "in_transit"
+  | "out_for_delivery"
+  | "delivered"
+  | "cancelled";
+
 export interface ICustomerAddress {
   streetAddress: string;
   houseNo: string;
@@ -8,6 +16,7 @@ export interface ICustomerAddress {
   country: string;
   postalCode: string;
 }
+
 export interface ISHIPMENT extends Document {
   _id: mongoose.Types.ObjectId;
   shipmentId: string;
@@ -23,38 +32,19 @@ export interface ISHIPMENT extends Document {
   createdAt?: Date;
   updatedAt?: Date;
 }
-const customerAddressSchema = new Schema<ICustomerAddress>({
-  streetAddress: {
-    type: String,
-    required: true,
-    trim: true,
+
+const customerAddressSchema = new Schema<ICustomerAddress>(
+  {
+    streetAddress: { type: String, required: true, trim: true },
+    houseNo: { type: String, required: true, trim: true },
+    town: { type: String, required: true, trim: true },
+    city: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
+    postalCode: { type: String, required: true, trim: true },
   },
-  houseNo: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  town: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  city: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  country: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-}, { _id: false });
+  { _id: false }
+);
+
 const shipmentSchema: Schema<ISHIPMENT> = new Schema(
   {
     shipmentId: {
@@ -69,53 +59,38 @@ const shipmentSchema: Schema<ISHIPMENT> = new Schema(
       ref: "Order",
       required: true,
     },
-    customerName: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-    customerAddress: {
-      type: customerAddressSchema,
-      required: true,
-    },
+    customerName: { type: String, required: true, trim: true },
+    customerAddress: { type: customerAddressSchema, required: true },
     status: {
       type: String,
-      enum: ["pending", "preparing", "in_transit", "out_for_delivery", "delivered", "cancelled"],
+      enum: [
+        "pending",
+        "preparing",
+        "in_transit",
+        "out_for_delivery",
+        "delivered",
+        "cancelled",
+      ],
       default: "pending",
       required: true,
     },
-    expectedDeliveryDate: {
-      type: Date,
-      required: true,
-    },
-    actualDeliveryDate: {
-      type: Date,
-      default: null,
-    },
-    trackingNumber: {
-      type: String,
-      trim: true,
-      default: null,
-    },
-    carrier: {
-      type: String,
-      trim: true,
-      default: null,
-    },
-    farmerId: {
-      type: Schema.Types.ObjectId,
-      ref: "Farmer",
-      required: true,
-    },
+    expectedDeliveryDate: { type: Date, required: true },
+    actualDeliveryDate: { type: Date, default: null },
+    trackingNumber: { type: String, trim: true, default: null },
+    carrier: { type: String, trim: true, default: null },
+    farmerId: { type: Schema.Types.ObjectId, ref: "Farmer", required: true },
   },
   { timestamps: true }
 );
+
 shipmentSchema.index({ farmerId: 1 });
 shipmentSchema.index({ orderId: 1 });
 shipmentSchema.index({ status: 1 });
 shipmentSchema.index({ createdAt: -1 });
 shipmentSchema.index({ expectedDeliveryDate: 1 });
+
 const Shipment = mongoose.model<ISHIPMENT>("Shipment", shipmentSchema);
+
 shipmentSchema.pre("save", async function (next) {
   if (this.isNew && !this.shipmentId) {
     try {
@@ -127,10 +102,12 @@ shipmentSchema.pre("save", async function (next) {
   }
   next();
 });
+
 shipmentSchema.pre("save", function (next) {
   if (this.status === "delivered" && !this.actualDeliveryDate) {
     this.actualDeliveryDate = new Date();
   }
   next();
 });
+
 export default Shipment;

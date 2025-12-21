@@ -1,5 +1,6 @@
-services:
+version: '3.9'
 
+services:
   mongodb:
     image: mongo:7.0
     container_name: farmseghar-mongodb
@@ -15,10 +16,9 @@ services:
     image: farmseghar/mern-server
     container_name: farmseghar-server
     ports:
-      - "8000:8000"
-    environment:
-      - PORT=8000
-      - MONGO_URI=mongodb://mongodb:27017/mern
+      - "${PORT}:${PORT}"
+    env_file:
+      - .env        
     depends_on:
       - mongodb
     volumes:
@@ -34,8 +34,8 @@ services:
     restart: unless-stopped
     ports:
       - "5173:5173"
-    environment:
-      - VITE_API_URL=http://server:8000/api
+    env_file:
+      - .env
     depends_on:
       - server
     volumes:

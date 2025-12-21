@@ -1,6 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+
 export type OrderStatus = "pending" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled";
 export type PaymentMethod = "card" | "cash";
+
 export interface IOrderItem {
   productId: mongoose.Types.ObjectId;
   productName: string;
@@ -9,6 +11,7 @@ export interface IOrderItem {
   price: number;
   total: number;
 }
+
 export interface IShippingAddress {
   streetAddress: string;
   houseNo: string;
@@ -17,6 +20,7 @@ export interface IShippingAddress {
   country: string;
   postalCode: string;
 }
+
 export interface IORDER extends Document {
   _id: mongoose.Types.ObjectId;
   orderId: string;
@@ -30,70 +34,55 @@ export interface IORDER extends Document {
   createdAt?: Date;
   updatedAt?: Date;
 }
-const orderItemSchema = new Schema<IOrderItem>({
-  productId: {
-    type: Schema.Types.ObjectId,
-    ref: "Product",
-    required: true,
+
+const orderItemSchema = new Schema<IOrderItem>(
+  {
+    productId: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    productName: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, "Quantity must be at least 1"],
+    },
+    unit: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+    price: {
+      type: Number,
+      required: true,
+      min: [0, "Price cannot be negative"],
+    },
+    total: {
+      type: Number,
+      required: true,
+      min: [0, "Total cannot be negative"],
+    },
   },
-  productName: {
-    type: String,
-    required: true,
-    trim: true,
+  { _id: false }
+);
+
+const shippingAddressSchema = new Schema<IShippingAddress>(
+  {
+    streetAddress: { type: String, required: true, trim: true },
+    houseNo: { type: String, required: true, trim: true },
+    town: { type: String, required: true, trim: true },
+    city: { type: String, required: true, trim: true },
+    country: { type: String, required: true, trim: true },
+    postalCode: { type: String, required: true, trim: true },
   },
-  quantity: {
-    type: Number,
-    required: true,
-    min: [1, "Quantity must be at least 1"],
-  },
-  unit: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  price: {
-    type: Number,
-    required: true,
-    min: [0, "Price cannot be negative"],
-  },
-  total: {
-    type: Number,
-    required: true,
-    min: [0, "Total cannot be negative"],
-  },
-}, { _id: false });
-const shippingAddressSchema = new Schema<IShippingAddress>({
-  streetAddress: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  houseNo: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  town: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  city: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  country: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  postalCode: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-}, { _id: false });
+  { _id: false }
+);
+
 const orderSchema: Schema<IORDER> = new Schema(
   {
     orderId: {
@@ -116,39 +105,27 @@ const orderSchema: Schema<IORDER> = new Schema(
         message: "Order must have at least one item",
       },
     },
-    totalAmount: {
-      type: Number,
-      required: true,
-      min: [0, "Total amount cannot be negative"],
-    },
+    totalAmount: { type: Number, required: true, min: [0, "Total amount cannot be negative"] },
     status: {
       type: String,
       enum: ["pending", "confirmed", "processing", "shipped", "delivered", "cancelled"],
       default: "pending",
       required: true,
     },
-    shippingAddress: {
-      type: shippingAddressSchema,
-      required: true,
-    },
-    paymentMethod: {
-      type: String,
-      enum: ["card", "cash"],
-      required: true,
-    },
-    farmerId: {
-      type: Schema.Types.ObjectId,
-      ref: "Farmer",
-      required: false,
-    },
+    shippingAddress: { type: shippingAddressSchema, required: true },
+    paymentMethod: { type: String, enum: ["card", "cash"], required: true },
+    farmerId: { type: Schema.Types.ObjectId, ref: "Farmer", required: false },
   },
   { timestamps: true }
 );
+
 orderSchema.index({ customerId: 1 });
 orderSchema.index({ farmerId: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ createdAt: -1 });
+
 const Order = mongoose.model<IORDER>("Order", orderSchema);
+
 orderSchema.pre("save", async function (next) {
   if (this.isNew) {
     if (!this.orderId || this.orderId.startsWith("TEMP-")) {
@@ -162,4 +139,5 @@ orderSchema.pre("save", async function (next) {
   }
   next();
 });
+
 export default Order;
