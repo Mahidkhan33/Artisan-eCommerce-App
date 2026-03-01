@@ -56,7 +56,7 @@ const FarmerVerifyCodePage: React.FC = () => {
           <div className="mb-4 lg:mb-6">
             <div className="flex items-center gap-3">
             <img
-            src="/assets/Logo.png" 
+            src={new URL('../assets/Logo.png', import.meta.url).href}
             alt="LocalHarvest Logo"
             className="w-10 h-10 object-contain shrink-0" 
             />
@@ -124,9 +124,9 @@ const FarmerVerifyCodePage: React.FC = () => {
       </div>
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
       <img
-  src="/assets/farmer-verify-code.jpg"
+  src={new URL('../assets/farmer-verify-code.jpg', import.meta.url).href}
   alt="Auth Illustration"
-  className="w-full h-[600px] object-cover block"
+  className="w-full h-[800px] object-cover block"
 />
       </div>
     </div>

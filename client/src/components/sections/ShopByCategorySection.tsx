@@ -20,28 +20,28 @@ const defaultCategories: Category[] = [
     title: "Fresh Vegetables",
     description: "Farm-fresh vegetables delivered daily",
     to: "/vegetables",
-    image: "./assets/vegetables.jpg",
+    image: "../../assets/vegetables.jpg",
   },
   {
     id: "2",
     title: "Nutritious Fruits",
     description: "Organic fruits picked at peak ripeness",
     to: "/fruits",
-    image: "./assets/fruits.jpg",
+    image: "../../assets/fruits.jpg",
   },
   {
     id: "3",
     title: "Dairy Products",
     description: "Fresh dairy products from local farms",
     to: "/dairy",
-    image: "./assets/dairy-products.jpg",
+    image: "../../assets/dairy-products.jpg",
   },
   {
     id: "4",
     title: "Healthy Spices",
     description: "Aromatic spices and herbs",
     to: "/herbs",
-    image: "./assets/spices.jpg",
+    image: "../../assets/spices.jpg",
     },
 ];
 const ShopByCategorySection: React.FC<ShopByCategorySectionProps> = ({
@@ -71,9 +71,9 @@ const ShopByCategorySection: React.FC<ShopByCategorySectionProps> = ({
             >
               {}
               <div className="w-full h-48 bg-gray-200 overflow-hidden">
-                {category.image ? (
+                  {category.image ? (
                   <img
-                    src={category.image}
+                    src={new URL(category.image!, import.meta.url).href}
                     alt={category.title}
                     className="w-full h-full object-cover"
                   />

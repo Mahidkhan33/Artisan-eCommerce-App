@@ -79,7 +79,7 @@ const BankDetailsPage: React.FC = () => {
           <div className="mb-4">
             <div className="flex items-center gap-3">
             <img
-            src="/assets/Logo.png" 
+            src={new URL('../assets/Logo.png', import.meta.url).href}
             alt="LocalHarvest Logo"
             className="w-10 h-10 object-contain shrink-0" 
             />
@@ -194,7 +194,7 @@ const BankDetailsPage: React.FC = () => {
       </div>
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
       <img
-  src="/assets/bank-details.jpg"
+  src={new URL('../assets/bank-details.jpg', import.meta.url).href}
   alt="Auth Illustration"
   className="w-full h-[800px] object-cover block"
 />

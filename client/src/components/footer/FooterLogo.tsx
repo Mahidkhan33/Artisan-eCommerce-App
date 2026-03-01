@@ -31,8 +31,8 @@ const FooterLogo: React.FC<FooterLogoProps> = ({
         }}
       >
         {showIcon && (
-          <div className="w-10 h-10 rounded-full bg-white shrink-0" >
-            <img src="/assets/Logo.png" alt="Logo" className="w-full h-full object-cover rounded-full" />
+            <div className="w-10 h-10 rounded-full bg-white shrink-0" >
+            <img src={new URL('../../assets/Logo.png', import.meta.url).href} alt="Logo" className="w-full h-full object-cover rounded-full" />
           </div>
         )}
         <span className="text-xl font-bold text-green-500">FarmSeGhar</span>

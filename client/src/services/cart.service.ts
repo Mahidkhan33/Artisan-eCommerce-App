@@ -1,5 +1,4 @@
 import api from "./api";
-import type { CartItem } from "@/types/cart.types";
 export interface CartResponse {
   success: boolean;
   cart: {

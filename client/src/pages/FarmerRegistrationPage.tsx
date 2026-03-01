@@ -58,10 +58,10 @@ const FarmerRegistrationPage: React.FC = () => {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
               <img
-            src="/assets/Logo.png" 
-            alt="LocalHarvest Logo"
-            className="w-10 h-10 object-contain shrink-0" 
-            />
+              src={new URL('../assets/Logo.png', import.meta.url).href}
+              alt="LocalHarvest Logo"
+              className="w-10 h-10 object-contain shrink-0" 
+              />
                 <span className="text-xl font-bold text-gray-900">LocalHarvest</span>
               </div>
             
@@ -198,7 +198,7 @@ const FarmerRegistrationPage: React.FC = () => {
 
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
       <img
-  src="/assets/farmer-registration.jpg"
+  src={new URL('../assets/farmer-registration.jpg', import.meta.url).href}
   alt="Auth Illustration"
   className="w-full h-[800px] object-cover block"
 />

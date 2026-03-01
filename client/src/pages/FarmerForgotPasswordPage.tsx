@@ -80,7 +80,7 @@ const FarmerForgotPasswordPage: React.FC = () => {
 
       <div className="hidden lg:flex lg:w-1/2 items-center justify-center p-0 h-full ">
       <img
-  src="/assets/farmer-forgot-password.jpg"
+  src={new URL('../assets/farmer-forgot-password.jpg', import.meta.url).href}
   alt="Auth Illustration"
   className="w-full h-[600px] object-cover block"
 />
