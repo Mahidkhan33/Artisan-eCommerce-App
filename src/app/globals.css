@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-display), system-ui, -apple-system, sans-serif;
+  
+  /* Earthy Tuscan Terracotta Palette */
+  --color-brand-green-light: #FDF9F6;
+  --color-brand-green: #C2410C;
+  --color-brand-green-dark: #7C2D12;
+  --color-brand-green-deep: #201514;
+  
+  /* Aged Ocher / Warm Gold Palette */
+  --color-brand-gold-light: #FDF4E3;
+  --color-brand-gold: #B45309;
+  --color-brand-gold-dark: #78350F;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(1.5rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleUp {
+  from {
+    transform: scale(0.95);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* Custom premium scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F8F6F4;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E5E1DC;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #C4C0B9;
+}
+
+/* Base Body settings */
+body {
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}

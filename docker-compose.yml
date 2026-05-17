@@ -3,18 +3,18 @@ version: '3.9'
 services:
   mongodb:
     image: mongo:7.0
-    container_name: farmseghar-mongodb
+    container_name: artisanalley-mongodb
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
     networks:
-      - farmseghar-network
+      - artisanalley-network
 
   server:
     build: ./server
-    image: farmseghar/mern-server
-    container_name: farmseghar-server
+    image: artisanalley/mern-server
+    container_name: artisanalley-server
     ports:
       - "${PORT}:${PORT}"
     env_file:
@@ -25,12 +25,12 @@ services:
       - ./server:/app
       - /app/node_modules
     networks:
-      - farmseghar-network
+      - artisanalley-network
 
   client:
     build: ./client
-    image: farmseghar/mern-client
-    container_name: farmseghar-client
+    image: artisanalley/mern-client
+    container_name: artisanalley-client
     restart: unless-stopped
     ports:
       - "5173:5173"
@@ -42,12 +42,12 @@ services:
       - ./client:/app
       - /app/node_modules
     networks:
-      - farmseghar-network
+      - artisanalley-network
 
 volumes:
   mongodb_data:
     driver: local
 
 networks:
-  farmseghar-network:
+  artisanalley-network:
     driver: bridge
