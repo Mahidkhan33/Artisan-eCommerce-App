@@ -88,7 +88,7 @@ shipmentSchema.index({ status: 1 });
 shipmentSchema.index({ createdAt: -1 });
 shipmentSchema.index({ expectedDeliveryDate: 1 });
 
-shipmentSchema.pre("save", async function (next: any) {
+shipmentSchema.pre("save", async function () {
   if (this.isNew && !this.shipmentId) {
     try {
       const count = await Shipment.countDocuments();
@@ -97,7 +97,6 @@ shipmentSchema.pre("save", async function (next: any) {
       this.shipmentId = `SHIP-${Date.now().toString().slice(-6)}`;
     }
   }
-  next();
 });
 
 shipmentSchema.pre("save", function (next: any) {
