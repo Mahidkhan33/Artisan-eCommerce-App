@@ -64,7 +64,7 @@ interface OrderType {
 
 export default function ArtisanDashboard() {
   const router = useRouter();
-  const { artisan, triggerToast } = useApp();
+  const { artisan, setArtisan, loading: sessionLoading, triggerToast } = useApp();
 
   const [activeTab, setActiveTab] = useState<"overview" | "harvests" | "orders">("overview");
   const [products, setProducts] = useState<ProductType[]>([]);
@@ -93,19 +93,29 @@ export default function ArtisanDashboard() {
   const [submittingProduct, setSubmittingProduct] = useState(false);
 
   useEffect(() => {
+    // Wait for the global session check to finish before acting
+    if (sessionLoading) return;
+
     if (!artisan) {
       triggerToast("Access denied. Please log in as a partner artisan", "warning");
       router.push("/artisan/login");
     } else {
       fetchDashboardData();
     }
-  }, [artisan]);
+  }, [artisan, sessionLoading]);
 
   const fetchDashboardData = async () => {
     try {
       setLoading(true);
 
       const prodRes = await fetch("/api/artisans/products");
+      // If the server rejects our session, clear state and redirect
+      if (prodRes.status === 401) {
+        setArtisan(null);
+        triggerToast("Your session has expired. Please log in again.", "warning");
+        router.push("/artisan/login");
+        return;
+      }
       let prodList: ProductType[] = [];
       if (prodRes.ok) {
         const prodData = await prodRes.json();

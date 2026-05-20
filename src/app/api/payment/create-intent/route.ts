@@ -115,14 +115,12 @@ export async function POST(req: Request) {
     const paymentIntent = await stripe.paymentIntents.create({
       amount: amountInCents,
       currency: "usd",
+      payment_method_types: ["card"],
       metadata: {
         userId: auth.data._id.toString(),
         orderType: "cart",
         originalAmountPKR: totalAmount.toString(),
         conversionRate: PKR_TO_USD_RATE.toString(),
-      },
-      automatic_payment_methods: {
-        enabled: true,
       },
       description: `ArtisanAlley Order - Rs. ${totalAmount.toFixed(2)} PKR`,
     });
