@@ -69,21 +69,21 @@ const artisanSchema: Schema<IARTISAN> = new Schema(
     },
     studioName: {
       type: String,
-      required: [true, "Farm name is required"],
+      required: [true, "Studio name is required"],
       trim: true,
-      minlength: [2, "Farm name must be at least 2 characters"],
+      minlength: [2, "Studio name must be at least 2 characters"],
     },
     studioLocation: {
       type: String,
-      required: [true, "Farm location is required"],
+      required: [true, "Studio location is required"],
       trim: true,
-      minlength: [2, "Farm location must be at least 2 characters"],
+      minlength: [2, "Studio location must be at least 2 characters"],
     },
     studioDescription: {
       type: String,
-      required: [true, "Farm description is required"],
+      required: [true, "Studio description is required"],
       trim: true,
-      minlength: [2, "Farm description must be at least 2 characters"],
+      minlength: [2, "Studio description must be at least 2 characters"],
     },
     accountHolderName: {
       type: String,
@@ -135,10 +135,9 @@ const artisanSchema: Schema<IARTISAN> = new Schema(
   { timestamps: true }
 );
 
-artisanSchema.pre("save", async function (next: any) {
-  if (!this.isModified("password")) return next();
+artisanSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
-  next();
 });
 
 artisanSchema.methods.comparePassword = async function (password: string) {

@@ -80,7 +80,7 @@ export default function CheckoutPage() {
             Delivery Checkout
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Provide your shipping coordinates to complete your organic purchase.
+            Provide your shipping coordinates to complete your artisan purchase.
           </p>
         </div>
 

@@ -22,7 +22,7 @@ export default function UserLogin() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/users/login", {
+      const res = await fetch("/api/customers/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -62,10 +62,10 @@ export default function UserLogin() {
         </Link>
         
         <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-800 text-left">
-          Harvest Customer Sign In
+          Artisan Alley Customer Sign In
         </h2>
         <p className="mt-1.5 text-xs text-slate-500 text-left">
-          Log in to manage orders, schedule shipments and checkout organic baskets.
+          Log in to manage orders, schedule shipments and checkout bespoke goods.
         </p>
       </div>
 

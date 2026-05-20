@@ -103,7 +103,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     try {
       setLoading(true);
       
-      const userRes = await fetch("/api/users/me");
+      const userRes = await fetch("/api/customers/me");
       if (userRes.ok) {
         const userData = await userRes.json();
         if (userData.success) {
@@ -234,7 +234,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const logout = async (role: "user" | "artisan") => {
     try {
-      const url = role === "user" ? "/api/users/logout" : "/api/artisans/logout";
+      const url = role === "user" ? "/api/customers/logout" : "/api/artisans/logout";
       await fetch(url, { method: "POST" });
       if (role === "user") {
         setUser(null);

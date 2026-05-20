@@ -30,7 +30,7 @@ export async function POST(req: Request) {
     user.resetPasswordExpire = new Date(Date.now() + 10 * 60 * 1000); 
     await user.save();
 
-    const origin = req.headers.get("origin") || "http://localhost:3000";
+    const origin = req.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "https://artisan-e-commerce-app.vercel.app";
     const resetUrl = `${origin}/reset-password?token=${resetToken}&userId=${user._id}`;
 
     const emailResponse = await sendResetPasswordEmail(user.email, user.fullName.firstName, resetUrl);

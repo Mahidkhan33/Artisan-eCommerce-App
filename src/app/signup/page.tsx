@@ -26,7 +26,7 @@ export default function UserSignup() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/users/create", {
+      const res = await fetch("/api/customers/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -65,10 +65,10 @@ export default function UserSignup() {
         </Link>
         
         <h2 className="font-display text-3xl font-extrabold tracking-tight text-slate-800 text-left">
-          Harvest Customer Sign Up
+          Artisan Alley Customer Sign Up
         </h2>
         <p className="mt-1.5 text-xs text-slate-500 text-left">
-          Create an organic buyer account to start ordering fresh local harvest boxes.
+          Create a customer account to start ordering handcrafted bespoke goods.
         </p>
       </div>
 

@@ -28,7 +28,7 @@ function VerifyContent() {
 
     try {
       setLoading(true);
-      const res = await fetch("/api/users/verify", {
+      const res = await fetch("/api/customers/verify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ userId, otp }),

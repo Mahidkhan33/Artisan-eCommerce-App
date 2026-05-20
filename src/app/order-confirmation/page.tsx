@@ -104,6 +104,12 @@ export default function OrderConfirmation() {
             {}
             <div className="flex flex-col sm:flex-row gap-3">
               <Link
+                href="/orders"
+                className="flex-1 flex items-center justify-center gap-1.5 rounded-full bg-brand-green hover:bg-brand-green-dark text-white py-3 text-xs font-semibold shadow-md shadow-emerald-500/10 transition-colors"
+              >
+                Track My Order
+              </Link>
+              <Link
                 href="/"
                 className="flex-1 flex items-center justify-center gap-1.5 rounded-full border border-slate-200 hover:bg-slate-50 text-slate-700 py-3 text-xs font-semibold shadow-xs transition-colors"
               >

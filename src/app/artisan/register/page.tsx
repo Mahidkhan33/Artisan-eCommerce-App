@@ -16,9 +16,9 @@ export default function ArtisanRegister() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [password, setPassword] = useState("");
 
-  const [studioName, setFarmName] = useState("");
-  const [studioLocation, setFarmLocation] = useState("");
-  const [studioDescription, setFarmDescription] = useState("");
+  const [studioName, setStudioName] = useState("");
+  const [studioLocation, setStudioLocation] = useState("");
+  const [studioDescription, setStudioDescription] = useState("");
   const [cnic, setCnic] = useState("");
 
   const [accountHolderName, setAccountHolderName] = useState("");
@@ -190,7 +190,7 @@ export default function ArtisanRegister() {
                     type="text"
                     required
                     value={studioName}
-                    onChange={(e) => setFarmName(e.target.value)}
+                    onChange={(e) => setStudioName(e.target.value)}
                     placeholder="TerraGlaze Ceramic Studio"
                     className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-brand-green transition-all"
                   />
@@ -213,7 +213,7 @@ export default function ArtisanRegister() {
                     type="text"
                     required
                     value={studioLocation}
-                    onChange={(e) => setFarmLocation(e.target.value)}
+                    onChange={(e) => setStudioLocation(e.target.value)}
                     placeholder="Sargodha Road, Faisalabad, Punjab"
                     className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-brand-green transition-all"
                   />
@@ -223,7 +223,7 @@ export default function ArtisanRegister() {
                   <textarea
                     rows={2}
                     value={studioDescription}
-                    onChange={(e) => setFarmDescription(e.target.value)}
+                    onChange={(e) => setStudioDescription(e.target.value)}
                     placeholder="Tell buyers about your clay glazes, tanned leather, timber logs, weaving looms..."
                     className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-brand-green transition-all resize-none"
                   />

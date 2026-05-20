@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useApp } from "@/context/AppContext";
-import { ShoppingCart, Search, User, LogOut, LayoutDashboard, ChevronDown } from "lucide-react";
+import { ShoppingCart, Search, User, LogOut, LayoutDashboard, ChevronDown, ShoppingBag } from "lucide-react";
 import CartDrawer from "./CartDrawer";
 
 export default function Navbar() {
@@ -98,6 +98,14 @@ export default function Navbar() {
                         </p>
                         <p className="text-slate-500 truncate mt-0.5">{user.email}</p>
                       </div>
+                      <Link
+                        href="/orders"
+                        className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-medium text-slate-700 hover:bg-slate-50 transition-colors"
+                        onClick={() => setIsProfileDropdownOpen(false)}
+                      >
+                        <ShoppingBag size={14} />
+                        My Orders
+                      </Link>
                       <button
                         onClick={() => {
                           setIsProfileDropdownOpen(false);

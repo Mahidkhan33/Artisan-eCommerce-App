@@ -78,11 +78,11 @@ export default function ArtisanDashboard() {
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pName, setPName] = useState("");
   const [editingProduct, setEditingProduct] = useState<ProductType | null>(null);
 
-  const [pName, setPName] = useState("");
   const [pDescription, setPDescription] = useState("");
-  const [pCategory, setPCategory] = useState("Vegetables");
+  const [pCategory, setPCategory] = useState("Ceramics");
   const [pPrice, setPPrice] = useState("");
   const [pQuantity, setPQuantity] = useState("");
   const [pUnit, setPUnit] = useState("kg");
@@ -425,7 +425,7 @@ export default function ArtisanDashboard() {
 
                   {orders.length === 0 ? (
                     <p className="text-xs text-slate-400 text-center py-6">
-                      No orders placed with your farm yet. Once orders are made, they will populate here!
+                      No orders placed with your studio yet. Once orders are made, they will populate here!
                     </p>
                   ) : (
                     <div className="divide-y divide-slate-100">
@@ -566,7 +566,7 @@ export default function ArtisanDashboard() {
                     <span className="text-3xl mb-2 block">📦</span>
                     <h4 className="font-display font-bold text-slate-700 mb-1">Queue is empty</h4>
                     <p className="text-xs text-slate-500 max-w-xs mx-auto leading-normal">
-                      No order items have been requested from your farm yet. Once purchased, they will stream here!
+                      No order items have been requested from your studio yet. Once purchased, they will stream here!
                     </p>
                   </div>
                 ) : (

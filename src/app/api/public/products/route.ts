@@ -78,7 +78,7 @@ export async function GET(req: Request) {
         artisan: {
           _id: artisanId,
           fullName: artisan?.fullName,
-          studioName: artisan?.studioName || "Green Meadows Organic Farm",
+          studioName: artisan?.studioName || "Artisan Studio",
           studioLocation: location,
           profileImage: artisanImage,
         },

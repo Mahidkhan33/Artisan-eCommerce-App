@@ -16,7 +16,7 @@ const outfit = Outfit({
 
 export const metadata: Metadata = {
   title: "ArtisanAlley | Premium Handcrafted Ceramics, Leather & Textiles",
-  description: "Connect directly with independent craftsmen and artisans. Explore hand-thrown glazed stoneware, vegetable-tanned leather, handwoven tapestries, and organic carvings.",
+  description: "Connect directly with independent craftsmen and artisans. Explore hand-thrown glazed stoneware, vegetable-tanned leather, handwoven tapestries, and artisan carvings.",
 };
 
 export default function RootLayout({

@@ -116,7 +116,7 @@ export default function PaymentPage() {
             Payment Selection
           </h1>
           <p className="text-xs text-slate-500 mt-1">
-            Choose your payment method and finalize your organic order.
+            Choose your payment method and finalize your artisan order.
           </p>
         </div>
 
