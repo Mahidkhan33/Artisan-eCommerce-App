@@ -56,7 +56,7 @@ export async function PUT(
 
     await connectDB();
     const body = await req.json();
-    const { name, description, price, category, quantity, unit, images } = body;
+    const { name, description, price, category, quantity, unit, images, isAvailable } = body;
 
     const product = await Product.findOne({ _id: id, artisanId: auth.data._id });
     if (!product) {
@@ -72,7 +72,11 @@ export async function PUT(
     if (category) product.category = category;
     if (quantity !== undefined) {
       product.quantity = Number(quantity);
-      product.isAvailable = Number(quantity) > 0;
+      // Auto-archive if stock hits zero, otherwise respect manual toggle
+      product.isAvailable = Number(quantity) > 0 ? (isAvailable !== undefined ? Boolean(isAvailable) : product.isAvailable) : false;
+    } else if (isAvailable !== undefined) {
+      // Allow manual toggle when quantity is not being updated
+      product.isAvailable = Boolean(isAvailable);
     }
     if (unit) product.unit = unit;
     if (images) product.images = Array.isArray(images) ? images : [];

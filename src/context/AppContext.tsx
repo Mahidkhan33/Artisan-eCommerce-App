@@ -106,29 +106,35 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const userRes = await fetch("/api/customers/me");
       if (userRes.ok) {
         const userData = await userRes.json();
-        if (userData.success) {
-          setUserState(userData.user);
+        if (userData.success && userData.user) {
+          setUser(userData.user);
           
-          if (userData.user) {
-            const cartRes = await fetch("/api/cart");
-            if (cartRes.ok) {
-              const cartData = await cartRes.json();
-              if (cartData.success && cartData.cart) {
-                setCartItems(cartData.cart.items || []);
-              }
+          const cartRes = await fetch("/api/cart");
+          if (cartRes.ok) {
+            const cartData = await cartRes.json();
+            if (cartData.success && cartData.cart) {
+              setCartItems(cartData.cart.items || []);
             }
           }
           setLoading(false);
           return;
+        } else {
+          setUser(null);
         }
+      } else {
+        setUser(null);
       }
 
       const artisanRes = await fetch("/api/artisans/me");
       if (artisanRes.ok) {
         const artisanData = await artisanRes.json();
-        if (artisanData.success) {
-          setArtisanState(artisanData.artisan);
+        if (artisanData.success && artisanData.artisan) {
+          setArtisan(artisanData.artisan);
+        } else {
+          setArtisan(null);
         }
+      } else {
+        setArtisan(null);
       }
     } catch (error) {
       console.error("Session restoration failed:", error);
@@ -177,6 +183,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const updateCartQty = async (productId: string, quantity: number): Promise<boolean> => {
+    if (!user) return false;
     try {
       const res = await fetch(`/api/cart/items/${productId}`, {
         method: "PUT",
@@ -198,6 +205,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const removeFromCart = async (productId: string): Promise<boolean> => {
+    if (!user) return false;
     try {
       const res = await fetch(`/api/cart/items/${productId}`, {
         method: "DELETE",
@@ -218,6 +226,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const clearCart = async (): Promise<boolean> => {
+    if (!user) return false;
     try {
       const res = await fetch("/api/cart/clear", { method: "DELETE" });
       const data = await res.json();
