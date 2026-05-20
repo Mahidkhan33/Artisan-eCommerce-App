@@ -1,134 +1,35 @@
-# Docker Setup Guide
+# Docker Deployment Guide for Artisan Alley
+
+This project uses an optimized multi-stage Dockerfile designed specifically for Next.js 14+ Applications using the `standalone` output mode. This reduces the container size drastically.
 
 ## Prerequisites
-- Docker and Docker Compose installed
-- Environment variables configured (see `.env.example`)
+- Docker & Docker Compose installed on your system.
 
-## Quick Start
+## Environment Variables
+Ensure you have a `.env` file at the root of the project. Docker will automatically read from it.
+The `docker-compose.yml` defaults to launching its own internal MongoDB container (`mongodb:27017`), but if you have a valid cloud Atlas `MONGO_URI` in your `.env`, it will override the local connection and use that instead.
 
-1. **Create `.env` file** (copy from `.env.example` and fill in values):
+## Getting Started
+
+### 1. Build and Spin Up Containers
+Run the following command in the root directory:
 ```bash
-cp .env.example .env
+docker-compose up --build -d
+```
+This will:
+- Spin up a MongoDB 7.0 container (data will persist via Docker volumes).
+- Build the optimized Next.js Docker image.
+- Start the application on `http://localhost:3000`.
+
+### 2. View Logs
+To watch the live logs of your Next.js application:
+```bash
+docker-compose logs -f app
 ```
 
-2. **Build and start all services**:
-```bash
-docker-compose up --build
-```
-
-3. **Access the application**:
-   - Frontend: http://localhost:4173
-   - Backend API: http://localhost:8000/api
-   - MongoDB: localhost:27017
-
-## Docker Commands
-
-### Start services
-```bash
-docker-compose up
-```
-
-### Start in background
-```bash
-docker-compose up -d
-```
-
-### Stop services
+### 3. Tear Down
+To stop and remove the containers:
 ```bash
 docker-compose down
 ```
-
-### Stop and remove volumes
-```bash
-docker-compose down -v
-```
-
-### Rebuild specific service
-```bash
-docker-compose build server
-docker-compose build client
-```
-
-### View logs
-```bash
-docker-compose logs -f
-docker-compose logs -f server
-docker-compose logs -f client
-```
-
-### Execute commands in container
-```bash
-docker-compose exec server sh
-docker-compose exec client sh
-```
-
-## Multi-Stage Builds
-
-Both `client` and `server` use multi-stage builds:
-
-### Client Dockerfile Stages:
-1. **deps**: Installs all dependencies
-2. **builder**: Builds the React application
-3. **runner**: Runs the preview server with production build
-
-### Server Dockerfile Stages:
-1. **deps**: Installs all dependencies
-2. **builder**: Compiles TypeScript to JavaScript
-3. **runner**: Runs the server with production dependencies only
-
-## Environment Variables
-
-Required variables (must be set in `.env`):
-- `JWT_SECRET`
-- `JWT_REFRESH_SECRET`
-
-Optional variables (see `.env.example` for full list):
-- Email configuration (SMTP or Resend)
-- Stripe keys
-- Cloudinary credentials
-- Client URL
-
-## Troubleshooting
-
-### Network connectivity issues during build
-If you encounter `ECONNRESET` or network errors during `npm ci`:
-1. **Check your internet connection**
-2. **Retry the build** (Dockerfiles include retry logic):
-   ```bash
-   docker-compose build --no-cache
-   ```
-3. **Use Docker build with network mode**:
-   ```bash
-   docker-compose build --network=host
-   ```
-4. **Check Docker Desktop network settings**:
-   - Open Docker Desktop → Settings → Resources → Network
-   - Ensure DNS is configured properly
-
-### Port already in use
-If ports 8000, 4173, or 27017 are already in use, change them in `docker-compose.yml`
-
-### MongoDB connection issues
-Ensure MongoDB container is running:
-```bash
-docker-compose ps
-```
-
-### Rebuild after dependency changes
-```bash
-docker-compose build --no-cache
-docker-compose up
-```
-
-### Clear all Docker data
-```bash
-docker-compose down -v
-docker system prune -a
-```
-
-### npm registry timeout
-If npm registry is slow, you can configure a different registry in Dockerfile or use a proxy:
-```dockerfile
-RUN npm config set registry https://registry.npmjs.org/
-```
-
+*(Note: Your MongoDB database data will persist locally even if the container goes down. If you want to wipe the local database volume entirely, run `docker-compose down -v`)*

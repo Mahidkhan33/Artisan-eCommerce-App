@@ -1,46 +1,36 @@
 version: '3.9'
 
 services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: artisanalley-app
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      # By default, Docker will use the cloud Atlas URI if you provide it in your local .env,
+      # or you can override it here to connect to the local mongodb service below.
+      - MONGO_URI=${MONGO_URI:-mongodb://mongodb:27017/artisanalley}
+      - JWT_SECRET=${JWT_SECRET}
+      - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+    env_file:
+      - .env
+    depends_on:
+      - mongodb
+    networks:
+      - artisanalley-network
+
   mongodb:
     image: mongo:7.0
     container_name: artisanalley-mongodb
+    restart: unless-stopped
     ports:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
-    networks:
-      - artisanalley-network
-
-  server:
-    build: ./server
-    image: artisanalley/mern-server
-    container_name: artisanalley-server
-    ports:
-      - "${PORT}:${PORT}"
-    env_file:
-      - .env        
-    depends_on:
-      - mongodb
-    volumes:
-      - ./server:/app
-      - /app/node_modules
-    networks:
-      - artisanalley-network
-
-  client:
-    build: ./client
-    image: artisanalley/mern-client
-    container_name: artisanalley-client
-    restart: unless-stopped
-    ports:
-      - "5173:5173"
-    env_file:
-      - .env
-    depends_on:
-      - server
-    volumes:
-      - ./client:/app
-      - /app/node_modules
     networks:
       - artisanalley-network
 
