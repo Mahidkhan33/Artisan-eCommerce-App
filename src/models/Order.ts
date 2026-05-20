@@ -123,8 +123,6 @@ orderSchema.index({ artisanId: 1 });
 orderSchema.index({ status: 1 });
 orderSchema.index({ createdAt: -1 });
 
-const Order = mongoose.models.Order || mongoose.model<IORDER>("Order", orderSchema);
-
 orderSchema.pre("save", async function (next: any) {
   if (this.isNew) {
     if (!this.orderId || this.orderId.startsWith("TEMP-")) {
@@ -138,5 +136,7 @@ orderSchema.pre("save", async function (next: any) {
   }
   next();
 });
+
+const Order = mongoose.models.Order || mongoose.model<IORDER>("Order", orderSchema);
 
 export default Order;

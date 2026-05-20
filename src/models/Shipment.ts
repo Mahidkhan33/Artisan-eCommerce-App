@@ -88,8 +88,6 @@ shipmentSchema.index({ status: 1 });
 shipmentSchema.index({ createdAt: -1 });
 shipmentSchema.index({ expectedDeliveryDate: 1 });
 
-const Shipment = mongoose.models.Shipment || mongoose.model<ISHIPMENT>("Shipment", shipmentSchema);
-
 shipmentSchema.pre("save", async function (next: any) {
   if (this.isNew && !this.shipmentId) {
     try {
@@ -108,5 +106,7 @@ shipmentSchema.pre("save", function (next: any) {
   }
   next();
 });
+
+const Shipment = mongoose.models.Shipment || mongoose.model<ISHIPMENT>("Shipment", shipmentSchema);
 
 export default Shipment;

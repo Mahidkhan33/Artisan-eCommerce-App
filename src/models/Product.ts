@@ -61,7 +61,7 @@ const productSchema: Schema<IPRODUCT> = new Schema(
       type: String,
       required: [true, "Product unit is required"],
       trim: true,
-      enum: ["kg", "g", "lb", "piece", "box", "bunch", "dozen", "liter", "ml"],
+      enum: ["kg", "g", "lb", "piece", "box", "bunch", "dozen", "liter", "ml", "set", "batch"],
     },
     images: {
       type: [String],
