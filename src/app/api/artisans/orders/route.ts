@@ -14,7 +14,6 @@ export async function GET(req: Request) {
     }
 
     await connectDB();
-    // Fetch all orders that belong to the logged-in artisan and populate customer details
     const orders = await Order.find({ artisanId: auth.data._id })
       .populate("customerId", "fullName phoneNumber email")
       .sort({ createdAt: -1 });

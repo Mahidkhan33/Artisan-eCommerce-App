@@ -200,12 +200,7 @@ export default function PaymentPage() {
                   <div className="space-y-4 animate-[fadeIn_0.2s_ease-out]">
                     
                     {}
-                    <div className="rounded-xl bg-amber-50 border border-amber-200/50 p-4 text-xs text-amber-800 flex items-start gap-3">
-                      <AlertCircle className="text-amber-600 shrink-0 mt-0.5" size={16} />
-                      <p className="leading-relaxed">
-                        <strong>Developer notice:</strong> Stripe gateway requires active publishable APIs. We have deployed a self-healing card mockup interface below. Typing card digits will execute full backend state reductions and order masterpieces!
-                      </p>
-                    </div>
+
 
                     <div className="space-y-4">
                       <div>

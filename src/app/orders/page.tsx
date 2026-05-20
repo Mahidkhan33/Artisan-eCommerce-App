@@ -142,7 +142,7 @@ export default function OrdersPage() {
                 key={order._id}
                 className="bg-white rounded-2xl border border-slate-200/60 shadow-sm overflow-hidden hover:border-emerald-200 transition-colors"
               >
-                {/* Order Header */}
+
                 <div className="bg-slate-50/50 px-5 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8">
                     <div>
@@ -185,9 +185,9 @@ export default function OrdersPage() {
                   </div>
                 </div>
 
-                {/* Order Body */}
+
                 <div className="p-5 flex flex-col md:flex-row gap-6">
-                  {/* Items List */}
+
                   <div className="flex-1 space-y-4">
                     <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
                       Purchased Items
@@ -216,7 +216,7 @@ export default function OrdersPage() {
                     </ul>
                   </div>
 
-                  {/* Order Details */}
+
                   <div className="w-full md:w-64 shrink-0 bg-slate-50/50 rounded-xl border border-slate-100 p-4 space-y-4">
                     <div>
                       <h4 className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
