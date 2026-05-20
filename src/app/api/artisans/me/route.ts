@@ -3,7 +3,7 @@ import { getAuthenticatedUserOrArtisan } from "@/lib/auth";
 
 export async function GET(req: Request) {
   try {
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("artisan");
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
         { success: false, artisan: null, message: "Artisan not authenticated" },

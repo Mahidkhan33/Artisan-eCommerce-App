@@ -48,7 +48,7 @@ export async function POST(req: Request) {
     const token = signToken({ id: artisan._id, role: "artisan" });
 
     const cookieStore = await cookies();
-    cookieStore.set("accessToken", token, {
+    cookieStore.set("artisanToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",

@@ -10,7 +10,7 @@ export async function PUT(
 ) {
   try {
     const { productId } = await params;
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("user");
     if (!auth || auth.type !== "user") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Customer not authenticated" },
@@ -103,7 +103,7 @@ export async function DELETE(
 ) {
   try {
     const { productId } = await params;
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("user");
     if (!auth || auth.type !== "user") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Customer not authenticated" },

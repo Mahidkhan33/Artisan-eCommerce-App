@@ -20,8 +20,10 @@ export function verifyToken(token: string) {
   }
 }
 
-export async function getAuthenticatedUserOrArtisan(cookieHeader?: string) {
+export async function getAuthenticatedUserOrArtisan(roleType?: "user" | "artisan", cookieHeader?: string) {
   let token = "";
+  let artisanToken = "";
+  let customerToken = "";
   
   if (cookieHeader) {
     const cookies = cookieHeader.split(";").reduce((acc: any, c) => {
@@ -31,41 +33,79 @@ export async function getAuthenticatedUserOrArtisan(cookieHeader?: string) {
       }
       return acc;
     }, {});
+    artisanToken = cookies["artisanToken"] || "";
+    customerToken = cookies["customerToken"] || "";
     token = cookies["accessToken"] || "";
   } else {
     try {
       const { cookies } = await import("next/headers");
       const cookieStore = await cookies();
+      artisanToken = cookieStore.get("artisanToken")?.value || "";
+      customerToken = cookieStore.get("customerToken")?.value || "";
       token = cookieStore.get("accessToken")?.value || "";
     } catch (e) {
       
     }
   }
 
-  if (!token) return null;
+  // 1. If roleType is "artisan", verify artisanToken or fallback token
+  if (roleType === "artisan") {
+    const targetToken = artisanToken || token;
+    if (!targetToken) return null;
+    const decoded = verifyToken(targetToken);
+    if (!decoded || !decoded.id) return null;
+    if (decoded.role === "artisan" || decoded.role === "admin") {
+      await connectDB();
+      const artisan = await Artisan.findById(decoded.id).select("-password");
+      if (artisan) return { type: "artisan", data: artisan };
+    }
+    return null;
+  }
 
-  const decoded = verifyToken(token);
-  if (!decoded || !decoded.id) return null;
+  // 2. If roleType is "user", verify customerToken or fallback token
+  if (roleType === "user") {
+    const targetToken = customerToken || token;
+    if (!targetToken) return null;
+    const decoded = verifyToken(targetToken);
+    if (!decoded || !decoded.id) return null;
+    if (!decoded.role || decoded.role === "user") {
+      await connectDB();
+      const user = await User.findById(decoded.id).select("-password");
+      if (user) return { type: "user", data: user };
+    }
+    return null;
+  }
 
-  await connectDB();
-
-  if (decoded.role === "artisan" || decoded.role === "admin") {
-    const artisan = await Artisan.findById(decoded.id).select("-password");
-    if (artisan) {
-      return { type: "artisan", data: artisan };
+  // 3. Fallback if no roleType is specified (check artisan first, then user)
+  if (artisanToken) {
+    const decoded = verifyToken(artisanToken);
+    if (decoded && decoded.id && (decoded.role === "artisan" || decoded.role === "admin")) {
+      await connectDB();
+      const artisan = await Artisan.findById(decoded.id).select("-password");
+      if (artisan) return { type: "artisan", data: artisan };
     }
   }
 
-  const user = await User.findById(decoded.id).select("-password");
-  if (user) {
-    return { type: "user", data: user };
+  if (customerToken) {
+    const decoded = verifyToken(customerToken);
+    if (decoded && decoded.id && (!decoded.role || decoded.role === "user")) {
+      await connectDB();
+      const user = await User.findById(decoded.id).select("-password");
+      if (user) return { type: "user", data: user };
+    }
   }
 
-  if (!decoded.role) {
-    const artisan = await Artisan.findById(decoded.id).select("-password");
-    if (artisan) return { type: "artisan", data: artisan };
-    const user = await User.findById(decoded.id).select("-password");
-    if (user) return { type: "user", data: user };
+  if (token) {
+    const decoded = verifyToken(token);
+    if (decoded && decoded.id) {
+      await connectDB();
+      if (decoded.role === "artisan" || decoded.role === "admin") {
+        const artisan = await Artisan.findById(decoded.id).select("-password");
+        if (artisan) return { type: "artisan", data: artisan };
+      }
+      const user = await User.findById(decoded.id).select("-password");
+      if (user) return { type: "user", data: user };
+    }
   }
 
   return null;

@@ -7,7 +7,7 @@ import mongoose from "mongoose";
 
 export async function POST(req: Request) {
   try {
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("user");
     if (!auth || auth.type !== "user") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Customer not authenticated" },

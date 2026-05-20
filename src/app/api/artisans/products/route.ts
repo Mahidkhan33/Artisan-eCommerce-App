@@ -5,7 +5,7 @@ import Product from "@/models/Product";
 
 export async function GET(req: Request) {
   try {
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("artisan");
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Artisan not authenticated" },
@@ -31,7 +31,7 @@ export async function GET(req: Request) {
 
 export async function POST(req: Request) {
   try {
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("artisan");
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Artisan not authenticated" },

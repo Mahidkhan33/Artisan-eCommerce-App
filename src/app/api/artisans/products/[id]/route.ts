@@ -9,7 +9,7 @@ export async function GET(
 ) {
   try {
     const { id } = await params;
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("artisan");
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Artisan not authenticated" },
@@ -46,7 +46,7 @@ export async function PUT(
 ) {
   try {
     const { id } = await params;
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("artisan");
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Artisan not authenticated" },
@@ -103,7 +103,7 @@ export async function DELETE(
 ) {
   try {
     const { id } = await params;
-    const auth = await getAuthenticatedUserOrArtisan();
+    const auth = await getAuthenticatedUserOrArtisan("artisan");
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
         { success: false, message: "Unauthorized: Artisan not authenticated" },
