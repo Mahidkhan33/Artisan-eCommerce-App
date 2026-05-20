@@ -39,6 +39,11 @@ export default function Storefront() {
   const [activeCategory, setActiveCategory] = useState("all");
   const [priceRange, setPriceRange] = useState<number>(3000);
   const [showFilters, setShowFilters] = useState(false);
+  const [selectedLocations, setSelectedLocations] = useState<string[]>([
+    "Faisalabad, Punjab",
+    "Sargodha, Punjab",
+    "Okara, Punjab",
+  ]);
 
   const fetchProducts = async () => {
     try {
@@ -71,7 +76,11 @@ export default function Storefront() {
 
     const matchesPrice = product.price <= priceRange;
 
-    return matchesSearch && matchesCategory && matchesPrice;
+    const matchesLocation =
+      selectedLocations.length === 0 ||
+      selectedLocations.some((loc) => product.location.includes(loc));
+
+    return matchesSearch && matchesCategory && matchesPrice && matchesLocation;
   });
 
   return (
@@ -157,7 +166,18 @@ export default function Storefront() {
                 <div className="flex flex-col gap-2">
                   {["Faisalabad, Punjab", "Sargodha, Punjab", "Okara, Punjab"].map((loc) => (
                     <label key={loc} className="flex items-center gap-2 text-xs font-medium text-slate-600 hover:text-slate-800 cursor-pointer">
-                      <input type="checkbox" defaultChecked className="rounded text-brand-green focus:ring-brand-green/20" />
+                      <input
+                        type="checkbox"
+                        checked={selectedLocations.includes(loc)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setSelectedLocations([...selectedLocations, loc]);
+                          } else {
+                            setSelectedLocations(selectedLocations.filter((l) => l !== loc));
+                          }
+                        }}
+                        className="rounded text-brand-green focus:ring-brand-green/20"
+                      />
                       {loc}
                     </label>
                   ))}
@@ -213,6 +233,7 @@ export default function Storefront() {
                   onClick={() => {
                     setActiveCategory("all");
                     setPriceRange(3000);
+                    setSelectedLocations(["Faisalabad, Punjab", "Sargodha, Punjab", "Okara, Punjab"]);
                   }}
                   className="rounded-full border border-slate-200 hover:bg-slate-50 text-slate-600 px-5 py-2 text-xs font-semibold transition-colors"
                 >

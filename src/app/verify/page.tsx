@@ -78,7 +78,7 @@ function VerifyContent() {
             </div>
           </div>
           <p className="text-[10px] text-slate-400 text-center leading-normal mt-2.5">
-            Check your mailbox. In development, the OTP code is logged directly to the server terminal.
+            Check your mailbox for the secure 6-digit verification code.
           </p>
         </div>
 
