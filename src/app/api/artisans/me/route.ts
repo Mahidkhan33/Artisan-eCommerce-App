@@ -6,8 +6,8 @@ export async function GET(req: Request) {
     const auth = await getAuthenticatedUserOrArtisan();
     if (!auth || auth.type !== "artisan") {
       return NextResponse.json(
-        { success: false, message: "Unauthorized: Artisan not authenticated" },
-        { status: 401 }
+        { success: false, artisan: null, message: "Artisan not authenticated" },
+        { status: 200 }
       );
     }
 
